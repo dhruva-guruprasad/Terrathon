@@ -1,0 +1,69 @@
+import random
+import re
+from cryptography.fernet import Fernet
+nft1 = "abc"
+nft2="def"
+nft3="ghi"
+nftval=["abc","def","ghi"]
+print("NFT:")
+for i in nftval:
+    print(i)
+flag=1
+while(flag==1):
+    rval=random.randint(1,3)
+    print(rval)
+    if rval==1:
+        iblock = "$".join([nft1,nft2]);
+        fblock = "$$$$".join([iblock,nft3]);
+        fblock=fblock+"$$$$$"
+    elif rval==2:
+        iblock = "$".join([nft1,nft2]);
+        fblock = "$$".join([iblock,nft3]);
+        fblock=fblock+"$$$$$$"
+    elif rval==3:
+        iblock = "$".join([nft1[::-1],nft2[::-1]]);
+        fblock = "$$".join([iblock,nft3[::-1]]);
+        fblock=fblock+"$$$$$$"
+    key = Fernet.generate_key()
+#case 1 is to insert $ in sqaured pattern
+#block is the new string created
+    block=""
+    fernet = Fernet(key)
+    encMessage = fernet.encrypt(fblock.encode())
+
+    #print("original string: ", fblock)
+    #print("encrypted string: ", encMessage)
+
+    decMessage = fernet.decrypt(encMessage).decode()
+
+    print("decrypted string: ", decMessage)
+# the user gives the index value
+    charac=str(input("Choose Start & End Points (Private PIN):"))
+
+    i=int(input("Enter value1"))
+    f=int(input("Enter value2"))
+
+    comp=decMessage
+    if rval==1 or rval==2:
+        s1=""
+        for i in range(i,f+1):
+            s1=s1+comp[i]
+
+        if charac==s1:
+            print("Validated. Your NFT has been added to the Blockchain")
+            flag=0
+        else:
+            print("Invalid.")
+            toremove=rval    
+    if rval==3:
+        s1=""
+        while(f>=i):
+            s1=s1+comp[f]
+            f=f-1
+        print(s1)
+        if charac==s1:
+            print("valid")
+            flag=0
+        else:
+            print("invalid")
+            toremove=rval
