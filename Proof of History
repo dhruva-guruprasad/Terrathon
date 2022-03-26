@@ -1,0 +1,27 @@
+class Node:
+    def __init__(self,count,output):
+      self.count = count
+      self.output= output
+      self.nextval = None
+
+class SLinkedList:
+    def __init__(self):
+      self.headval = None
+    def printList(self):
+        temp = self.headval
+        while (temp):
+            print (temp.output,end="-->")
+            temp = temp.nextval
+
+def mul(a):
+    return a*2
+
+list1 = SLinkedList()
+list1.headval= Node(1,mul(1))
+pres_node = list1.headval
+
+for i in range(2,6):
+    new_node = Node(i,mul(pres_node.output))
+    pres_node.nextval = new_node
+    pres_node = new_node
+list1.printList()
